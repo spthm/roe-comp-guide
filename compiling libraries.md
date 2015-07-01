@@ -1,4 +1,4 @@
-Installing (and compiling) C/C++ Libraries and Applications from Source
+Installing (and compiling) C/C++ libraries and applications from source
 =======================================================================
 
 Notation etc.
@@ -10,11 +10,11 @@ unfamiliar with the terminal, you should still be able to follow along.
 Code blocks (i.e. things which the terminal prints out, or you should be typing
 into the terminal), `look like this`, or,
 
-    first line here
-    second line here
+    look like this first line
+    and this second line
 
-Lastly, if you see `<sometext>`, this is generally example or placeholder text,
-and should not be copied verbatim!
+Lastly, if you see `<sometext>`, this is example or placeholder text, and
+should not be copied verbatim!
 For example, if your username is spth, and you see the text
 `cd /home/<username>`, then you should instead type `cd /home/spth`!
 
@@ -100,7 +100,7 @@ Finally, with this directory in place, we need to make sure that the compiler
 and linker will actually be able to find things we install here!
 For this task, we set some environment variables in our `~/.profile` file.
 (As of July 2015, `~/.profile` is used by default; on other systems, it is
-typical to instead use `~/.bash_profile'. To verify which of these exist on
+typical to instead use `~/.bash_profile`. To verify which of these exist on
 your machine, run `ls -a ~/`.)
 
 TODO: A note about .[bash_]profile vs .bashrc, and why --- on Linux --- we
@@ -111,54 +111,56 @@ ignored if either `.bash_profile` or `.bash_login` exist!
 Any text editor is fine.
 For emacs, run `emacs ~/.profile`, and add the following to the __bottom__ of
 the file.
-(Lines beginning with `#` are comments and no necessary, though if you are not
-familiar with writing bash.)
+Lines beginning with `#` are comments and not necessary, though if you are not
+familiar with writing bash it would be wise to keep them.
 Some of these environment variables are
 [specific to gcc](https://gcc.gnu.org/onlinedocs/gcc/Environment-Variables.html)
 or to
 [gnu make](https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html)
 and are noted as such.
 
-    # Set PATH so executables I have installed will be found.
-    if [ -d "$HOME/local/bin" ] ; then
-        export PATH="$HOME/local/bin:$PATH"
-    fi
+```bash
+# Set PATH so executables I have installed will be found.
+if [ -d "$HOME/local/bin" ] ; then
+    export PATH="$HOME/local/bin:$PATH"
+fi
 
-    # (Try to) ensure that gcc will find libraries I installed myself.
-    if [ -d "$HOME/local/lib" ] ; then
-        # For link-time. Specific to gcc.
-        # Equivalent to compiling with -L $HOME/local/lib
-        export LIBRARY_PATH="$HOME/local/lib:$LIBRARY_PATH"
+# (Try to) ensure that gcc will find libraries I installed myself.
+if [ -d "$HOME/local/lib" ] ; then
+    # For link-time. Specific to gcc.
+    # Equivalent to compiling with -L $HOME/local/lib
+    export LIBRARY_PATH="$HOME/local/lib:$LIBRARY_PATH"
 
-        # For runtime linking to shared library files, i.e. lib*.so files.
-        # Equivalent to linking with -R $HOME/local/lib, but fragile: if any
-        # -R flags are set THIS WILL BE IGNORED!!!
-        # NOTE: If this path ever changes, all code relying on shared library
-        # files will need to be recompiled (actually just have its rpath changed)
-        export LD_RUN_PATH="$HOME/local/lib:$LD_RUN_PATH"
+    # For runtime linking to shared library files, i.e. lib*.so files.
+    # Equivalent to linking with -R $HOME/local/lib, but fragile: if any
+    # -R flags are set THIS WILL BE IGNORED!!!
+    # NOTE: If this path ever changes, all code relying on shared library
+    # files will need to be recompiled (actually just have its rpath changed)
+    export LD_RUN_PATH="$HOME/local/lib:$LD_RUN_PATH"
 
-        # Account for Autoconf builds where -R is set, overriding LD_RUN_PATH.
-        # Specific to GNU make.
-        # We're throwing in the link-time search path for good measure.
-        export LDFLAGS="-L $HOME/local/lib -R $HOME/local/lib:$LDFLAGS"
-    fi
+    # Account for Autoconf builds where -R is set, overriding LD_RUN_PATH.
+    # Specific to GNU make.
+    # We're throwing in the link-time search path for good measure.
+    export LDFLAGS="-L $HOME/local/lib -R $HOME/local/lib:$LDFLAGS"
+fi
 
-    # Ensure that gcc will find header files I installed myself.
-    if [ -d "$HOME/local/include" ] ; then
-        # For compile time. Specific to gcc.
-        # Equivalent to -I$HOME/local/include
-        export CPATH="$HOME/local/include:$CPATH"
-    fi
+# Ensure that gcc will find header files I installed myself.
+if [ -d "$HOME/local/include" ] ; then
+    # For compile time. Specific to gcc.
+    # Equivalent to -I$HOME/local/include
+    export CPATH="$HOME/local/include:$CPATH"
+fi
 
-    # Ensure that man and info will find any documentation from manually
-    # installed packages.
-    if [ -d "$HOME/local/man" ] ; then
-        export MANPATH="$HOME/local/man:$MANPATH"
-    fi
+# Ensure that man and info will find any documentation from manually
+# installed packages.
+if [ -d "$HOME/local/man" ] ; then
+    export MANPATH="$HOME/local/man:$MANPATH"
+fi
 
-    if [ -d "$HOME/local/info" ] ; then
-        export INFOPATH="$HOME/local/info:$INFOPATH"
-    fi
+if [ -d "$HOME/local/info" ] ; then
+    export INFOPATH="$HOME/local/info:$INFOPATH"
+fi
+```
 
 TODO: Add other likely locations for man/info files. See my .profile!
 

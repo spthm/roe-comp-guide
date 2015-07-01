@@ -15,7 +15,7 @@ helpdesk can do on site-provided machines).
 All guides here install into userspace, so you should have no problems despite
 your limited user privileges.
 
-__Disclaimer__
+Disclaimer
 ---------------
 
 These guides are intended for a specific site distribution, and not as a
