@@ -28,17 +28,19 @@ workstation and that you have gcc, the
 The first of these should imply the second, but to be sure, open up a terminal
 and type
 
-    user@machine:~$ gcc --version
-    gcc (Debian 4.7.2-5) 4.7.2
-    Copyright (C) 2012 Free Software Foundation, Inc.
-    This is free software; see the source for copying conditions.  There is NO
-    warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```bash
+user@machine:~$ gcc --version
+gcc (Debian 4.7.2-5) 4.7.2
+Copyright (C) 2012 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-    user@machine:~$ g++ --version
-    g++ (Debian 4.7.2-5) 4.7.2
-    Copyright (C) 2012 Free Software Foundation, Inc.
-    This is free software; see the source for copying conditions.  There is NO
-    warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+user@machine:~$ g++ --version
+g++ (Debian 4.7.2-5) 4.7.2
+Copyright (C) 2012 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
 
 You should see something _similar_ to the above, but with different
 version numbers.
@@ -63,24 +65,30 @@ placing them at this location is not advised.
 Instead, make a directory `local` (or whatever you want to call it) on e.g.
 `/disk1` of your machine, which should have plenty of space:
 
-    cd /disk1/<username>
-    mkdir local
+```bash
+cd /disk1/<username>
+mkdir local
+```
 
 This is the location we will _actually_ be installing everything into.
 To make it conveniently accessible from your home directory, we're going to
 create a symbolic link (symlink) to it,
 
-    cd ~/
-    ln -s /disk1/<username>/local local
-    ls -l
+```bash
+cd ~/
+ln -s /disk1/<username>/local local
+ls -l
+```
 
 That last command will list everything in your home directory; look for the
-line ending
+line similar to
 
-    ... local -> /disk1/<username>/local/
+```bash
+lrwxrwxrwx 1 <username> users   16 Jan 01 12:00 local -> /disk1/<username>/local/
+```
 
 which shows that `/home/<username>/local` just points us through to the 'real'
-folder, living on `/disk1`.
+folder, living on `/disk1/<username>/`.
 
 From this point on, it is assumed that the above symlink exists.
 If you chose not to, __please modify all file paths accordingly__.
@@ -88,10 +96,12 @@ If you chose not to, __please modify all file paths accordingly__.
 It is also recommended to keep all the source code you compile in one place,
 e.g.
 
-    cd /disk1/<username>
-    mkdir sources
-    cd ~/
-    ln -s /disk1/<username>/sources sources
+```bash
+cd /disk1/<username>
+mkdir sources
+cd ~/
+ln -s /disk1/<username>/sources sources
+```
 
 where we have, as before, actually created the directory on `/disk1` and simply
 symlinked this in our home folder.
@@ -195,7 +205,9 @@ this guide).
 The simplest way around this is to add the following to an appropriate location
 in the Makefile
 
-    -R $HOME/local/lib
+```make
+-R $HOME/local/lib
+```
 
 where 'appropriate' depends on the Makefile in question, but in general
 anywhere you see `-L` flags is probably okay.
@@ -236,7 +248,9 @@ Suppose you know you need [LAPACK](http://www.netlib.org/lapack/), the Linear
 Algebra Package.
 Before installing it manually, run
 
-    locate liblapack.*
+```bash
+locate liblapack.*
+```
 
 and see what turns up.
 
@@ -265,17 +279,21 @@ As of July 2015, the most recent version is 6.0.0a, and we download
 `gmp-6.0.0a.tar.bz2`.
 Copy this file into `~/sources/`, and then,
 
-    cd ~/sources/
-    tar -xvf gmp-6.0.0a.tar.bz2
-    cd gmp-6.0.0a
-    ls
+```bash
+cd ~/sources/
+tar -xvf gmp-6.0.0a.tar.bz2
+cd gmp-6.0.0a
+ls
+```
 
 Two files are of note: `README` and `INSTALL`.
 It is __always strongly recommended__ to check any `README` or `INSTALL` files
 if they are present, since they will often walk you through the installation
 process! So,
 
-    less README
+```bash
+less README
+```
 
 (You can scroll up and down the file with the keyboard and mouse wheel when
 using `less`.)
@@ -284,11 +302,15 @@ goes.
 Just hit `q` on your keyboard to exit `less`.
 Let's try
 
-    less INSTALL
+```bash
+less INSTALL
+```
 
 This is much more useful, and immediately tells us to run
 
-    info -f doc/gmp.info
+```bash
+info -f doc/gmp.info
+```
 
 (Again, hit `q` on your keyboard to exit `less` before running the above.)
 `INSTALL` also contains some quick-and-dirty installation instructions, which
@@ -303,7 +325,9 @@ script is run!
 `--prefix` sets the root installation directory, which in our case is
 `$HOME/local/`, so the syntax is
 
-    ./configure --prefix=$HOME/local/
+```bash
+./configure --prefix=$HOME/local/
+```
 
 But we're not done yet!
 There are some other options we might want:
@@ -322,7 +346,9 @@ You may read through the rest, but these are the options we are going to use.
 Hit `q` to exit the info screen.
 Our configure command is then
 
-    ./configure --prefx=$HOME/local/ --enable-cxx --enable-fat
+```bash
+./configure --prefx=$HOME/local/ --enable-cxx --enable-fat
+```
 
 This will take a few minutes to run, and output a long list of checks.
 In general, it is usually not necessary that every line in the output end in
@@ -333,12 +359,14 @@ information.
 Additionally, if we scroll back up to a little below the beginning, look for
 set of lines similar to
 
-    using ABI="64"
-    CC="gcc -std=gnu99"
-    ...
-    CXX="g++"
-    ...
-    MPN_PATH=" x86_64/fat x86_64 generic"
+```bash
+using ABI="64"
+CC="gcc -std=gnu99"
+...
+CXX="g++"
+...
+MPN_PATH=" x86_64/fat x86_64 generic"
+```
 
 Here we can see the results of our `--enable-` flags: a C++ compiler has been
 detected, and the `MPN_PATH` is including `x86_64/fat` before the generic C
@@ -349,8 +377,10 @@ running on a 64-bit system in x86).
 
 According to the installation instructions, the next steps are
 
-    make
-    make check
+```bash
+make
+make check
+```
 
 Running `make` will output a _lot_ of commands; these are all the compilation
 and linking tasks writting into the Makefile - you do not need to do any
@@ -373,13 +403,15 @@ If `make check` is given, however, you should always run it!
 Scrolling up through the output of `make check`, you should see various lines
 like
 
-    ==================
-    All 9 tests passed
-    ==================
-    ...
-    ===================
-    All 63 tests passed
-    ===================
+```bash
+==================
+All 9 tests passed
+==================
+...
+===================
+All 63 tests passed
+===================
+```
 
 showing that the various different tests were passed.
 Any errors in the above are somewhat unexpected, as all passed on the
@@ -390,15 +422,19 @@ instructions correctly.
 
 Finally, then, we run
 
-    make install
+```bash
+make install
+```
 
 which will copy all library files into `$HOME/local/lib/`, and all header files
 into `$HOME/local/include`.
 To verify this, do
 
-    cd ~/local/
-    ls lib
-    ls include
+```bash
+cd ~/local/
+ls lib
+ls include
+```
 
 And you should see various files, such as `libgmp.so`, `libgmpxx.so` from the
 former `ls`, and `gmp.h` and `gmpxx.h` from the latter.
