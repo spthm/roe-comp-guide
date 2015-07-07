@@ -195,7 +195,7 @@ If you see any errors appear after this, go back and check your did not make
 any typos in the above.
 
 A few notes on the above (which may make more sense after you've read
-[the aside](#aside-static-vs-shared-libraries-link-time-vs-run-time) on static vs. shared libraries, and runtime linking.
+[the aside](#aside-static-vs-shared-libraries-link-time-vs-run-time) on static vs. shared libraries, and runtime linking).
 First of all, none of this is ideal!
 If you were installing on a system to which you had admin access (and could
 therefore run `sudo`), you'd use the package manager, and it would install
@@ -203,9 +203,9 @@ all library files and headers to locations which are searched _by default_.
 But we're supposing that is impossible.
 If your package manager didn't have said package available, but you still had
 admin rights, then there are
-[still better ways](http://choorucode.com/2014/01/14/how-to-add-library-directory-to-ldconfig-cache/)to set your _shared_ library search paths, using
+[still better ways](http://choorucode.com/2014/01/14/how-to-add-library-directory-to-ldconfig-cache/) to set your _shared_ library search paths, using
 [ldconfig](http://linux.die.net/man/8/ldconfig).
-And you could install to a default search path.
+Or you could install to a default search path.
 
 The above should work for installs using autoconf, which have a `./configure`
 to be run before you actually do any compiling or installing.
@@ -239,16 +239,21 @@ Setting `LD_LIBRARY_PATH` is another solution, but considered
 
 ### Aside: Static vs shared libraries, link-time vs run-time.
 
+TODO: Shorten this, and remove all pro/con motivation. Just explain core working.
+End with bullet-list of pros/cons.
+
+TODO: Define linker vs compiler in simple terms.
+
 The point of a library is that it is reusable.
 Say you have some code which implements some functions you'd end up using all
 the time; for example, computing Fourier transform of an input array (don't
-actually do this yourself, [a library already exists](www.fftw.org) for that).
+actually do this yourself, [a library already exists](http://www.fftw.org) for that).
 Rather than rewriting this code in every application you need it, or - only
 slightly less worse - copy-and-pasting it into every bit of source code, you
 write it _once_, compile that code into a library, and simply 'link' against
 this library whenever you need those functions.
 
-With a __static library__, sometimes __statically linked library__, all
+With a __static library__, sometimes called a __statically linked library__, all
 compiled code from the library that your application uses is copied directly
 into your application's executable file by the 'linker'.
 This is much better than you copy-and-pasting source code, because the linker
@@ -280,8 +285,8 @@ memory.
 Thus, when calling a function in a shared library, code from the library file
 itself is run, and the result is passed back to code in our executable.
 (Hence why shared library programs tend to run slower: there's some overhead.)
-On Linux, these files have the __extension `.so`__ ('shared object'), often
-`.so.x.x`, where the `x.x` is some version number, e.g. `libfft.so`.
+On Linux, these files have the __extension `.so`__ ('shared object', and often
+`.so.x.x`, where the `x.x` is some version number), e.g. `libfft.so`.
 
 Shared libraries have several other benefits, including:
 - Bug fixes in the library often only result in a new `.so` file, which will be
@@ -300,7 +305,7 @@ know that all users will have it in a standard location, `/usr/local/lib/libfft.
 `-L` flags tell the compiler and linker where to look at compile time.
 In the proposed example, this is `/opt/dev...`.
 For static libraries, this is entirely sufficient.
--`-R` or `-Wl,-rpath=` flags write code _into your application_ that tells the
+`-R` or `-Wl,-rpath=` flags write code _into your application_ that tells the
 runtime linker where you look whenever the application is launched.
 In the proposed example, this is `/usr/local...`.
 The runtime linker also has a list of default locations it will look at.
