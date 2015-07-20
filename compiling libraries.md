@@ -244,6 +244,8 @@ End with bullet-list of pros/cons.
 
 TODO: Define linker vs compiler in simple terms.
 
+TODO: [Add this reference link](http://docencia.ac.upc.edu/FIB/USO/Bibliografia/unix-c-libraries.html)
+
 The point of a library is that it is reusable.
 Say you have some code which implements some functions you'd end up using all
 the time; for example, computing Fourier transform of an input array (don't
@@ -550,3 +552,5 @@ variables we added to our `.profile` files should make this accessible.
 Run `info gmp` to find out!
 (This should result in the GMP manual coming up, for whatever version of GMP
 you installed - this guide assumed version 6.0.0.)
+
+TODO: Add a note about compiling from just a Makefile (e.g. SPHRAY - or maybe something a little more relevant). There are some gothas to watch out for, e.g. the [order object and librarys](http://stackoverflow.com/a/4623410/927046) are passed into GCC.
