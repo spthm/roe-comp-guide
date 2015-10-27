@@ -209,13 +209,13 @@ in your current window.
 If you see any errors appear after this, go back and check your did not make
 any typos in the above.
 
-If you have done this and run into trouble while trying to compile something, or you want to understand _what_ you've done, read [the article on static and shared libraries, and runtime linking](static_vs_shared_linking.md).
+If you have done this and run into trouble while trying to compile something, or you want to understand _what_ you've done, read [the article on static and shared libraries, and runtime linking](static_vs_shared_libraries.md).
 In particular, if you find your application compiles, but then complains about not being able to find libraries when you run it, see the 'Runtime linking' section.
 
 In any case, it is worth noting that none of the above is ideal!
 If you are using your own machine, where you can run `sudo`, you should always install libraries using the package manager where possible (`apt-get` on Debian and Ubuntu, `dnf` or `yum` on Redhat and Fedora, to name the most common options).
 And, if your package manager does not have the library you want, there are still better procedures.
-Again, see [the article on static and shared libraries, and runtime linking](static_vs_shared_linking.md).
+Again, see [the article on static and shared libraries, and runtime linking](static_vs_shared_libraries.md).
 
 You may come across setting `LD_LIBRARY_PATH` as another solution, but it is considered
 [bad practice](http://xahlee.info/UnixResource_dir/_/ldpath.html)
